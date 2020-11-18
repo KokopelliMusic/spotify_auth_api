@@ -1,0 +1,28 @@
+{
+  "name": "spotify_auth_api",
+  "version": "1.0.0",
+  "description": "A simple express server to do the spotify auth flow",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nierot/spotify_auth_api.git"
+  },
+  "author": "Nierot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nierot/spotify_auth_api/issues"
+  },
+  "homepage": "https://github.com/Nierot/spotify_auth_api#readme",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "lodash": "^4.17.20",
+    "querystring": "^0.2.0",
+    "socket.io": "^3.0.1"
+  }
+}
