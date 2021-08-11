@@ -13,11 +13,20 @@ app.use(bodyParser.json());
 
 app.post(`${route}/token`, (req, res) => {
     if (!req.body || !req.body.code || !req.body.redirect_uri) {
-        return res.json({
+        return res.status(400).json({
             status: 400,
             message: 'code and/or redirect_uri missing'
         })
     }
+
+    const params = new URLSearchParams()
+    params.append('grant_type', 'authorization_code')
+    params.append('code', req.body.code)
+    params.append('redirect_uri', req.body.redirect_uri)
+    params.append('client_id', client_id)
+    params.append('client_secret', client_secret)
+
+    const auth = Buffer.from(client_id + ':' + client_secret).toString('base64')
 
     axios.post('https://accounts.spotify.com/api/token', qs.stringify({
         grant_type: 'authorization_code',
@@ -37,15 +46,15 @@ app.post(`${route}/token`, (req, res) => {
                 message: 'ok',
             }, response.data));
         } else {
-            res.json(Object.assign({
+            res.status(200).json(Object.assign({
                 status: 400,
                 message: 'bad request'
             }, response.data));
         }
     })
     .catch(reason => {
-        console.log(reason);
-        res.json({
+        console.log(reason.response.data);
+        res.status(500).json({
             status: 500,
             message: 'request failed',
             err: reason.response.data || undefined
@@ -55,18 +64,18 @@ app.post(`${route}/token`, (req, res) => {
 
 app.post(`${route}/refresh`, (req, res) => {
     if (!req.body || !req.body.refresh_token) {
-        return res.json({
+        return res.status(400).json({
             status: 400,
             message: 'refresh_token missing'
         })
     }
 
     refresh(req.body.refresh_token)
-        .then(data => res.json(Object.assign({
+        .then(data => res.status(200).json(Object.assign({
             status: 200,
             message: 'ok'
         }, data)))
-        .catch(data => res.json(Object.assign({
+        .catch(data => res.status(500).json(Object.assign({
             status: 500,
             message: 'server error'
         }, data)));
