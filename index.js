@@ -10,6 +10,9 @@ const app = require('express')();
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get(`${route}/`, (req, res) => {
+	return res.status(200).json({ msg: 'Kokopelli Spotify API' })
+})
 
 app.post(`${route}/token`, (req, res) => {
     if (!req.body || !req.body.code || !req.body.redirect_uri) {
@@ -97,7 +100,8 @@ function refresh(refresh_token) {
             res(response.data);
         })
         .catch(reason => {
-            rej(reason.data);
+            	console.error(reason);
+		rej(reason.data);
         })
     })
 
